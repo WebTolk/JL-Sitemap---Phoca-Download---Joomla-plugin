@@ -2,12 +2,12 @@
 <extension type="plugin" group="jlsitemap" method="upgrade">
 	<name>PLG_PHOCADOWNLOAD</name>
 	<author>Sergey Tolkachyov</author>
-	<creationDate>July 2024</creationDate>
+	<creationDate>18.07.2024</creationDate>
 	<copyright>Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.</copyright>
 	<license>GNU General Public License v3.0</license>
 	<authorEmail>info@web-tolk.ru</authorEmail>
 	<authorUrl>https://web-tolk.ru</authorUrl>
-	<version>0.9.0</version>
+	<version>0.9.0.1</version>
 	<description>PLG_PHOCADOWNLOAD_DESC</description>
 	<scriptfile>script.php</scriptfile>
 	<languages folder="language">

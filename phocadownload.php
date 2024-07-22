@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    JLSitemap - Phoca Gallery Plugin
- * @version    0.9.0
+ * @version    1.0.0
  * @author     Sergey Tolkachyov - web-tolk.ru
- * @copyright  Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.
+ * @copyright  Copyright (c) 2022 Sergey Tolkachyov. All rights reserved.
  * @license    GNU General Public License v3.0
  * @link       https://web-tolk.ru/
  */

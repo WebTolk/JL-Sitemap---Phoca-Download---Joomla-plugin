@@ -174,7 +174,7 @@ class Phocadownload extends CMSPlugin implements SubscriberInterface
          */
         if ($this->params->get('files_enable', 0) == 1 && $componentParams->get('display_file_view','0') == 1) {
             $now = Factory::getDate('now', 'UTC')->toSql();
-            $query = 'SELECT * FROM ' . $db->quoteName('#__phocadownload', 'file');
+            $query = 'SELECT `id`, `catid`, `alias`, `date`, `metadata`, `published`, `approved`, `access`, `title` FROM ' . $db->quoteName('#__phocadownload', 'file');
 
             if (!$debug_mode) {
                 $query .= 'WHERE ' . $db->quoteName('file.published') . ' = ' . $db->quote('1') . ' 

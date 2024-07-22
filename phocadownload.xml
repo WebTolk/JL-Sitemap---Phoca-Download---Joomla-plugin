@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="jlsitemap" method="upgrade">
+	<name>PLG_PHOCADOWNLOAD</name>
+	<author>Sergey Tolkachyov</author>
+	<creationDate>July 2024</creationDate>
+	<copyright>Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.</copyright>
+	<license>GNU General Public License v3.0</license>
+	<authorEmail>info@web-tolk.ru</authorEmail>
+	<authorUrl>https://web-tolk.ru</authorUrl>
+	<version>0.9.0</version>
+	<description>PLG_PHOCADOWNLOAD_DESC</description>
+	<scriptfile>script.php</scriptfile>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_jlsitemap_phocadownload.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_jlsitemap_phocadownload.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_jlsitemap_phocadownload.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_jlsitemap_phocadownload.sys.ini</language>
+	</languages>
+	<files>
+		<filename plugin="phocadownload">phocadownload.php</filename>
+		<filename>phocadownload.xml</filename>
+		<folder>fields</folder>
+		<folder>language</folder>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field addfieldpath="plugins/jlsitemap/phocadownload/fields" type="plugininfo" name="plugininfo"/>
+			</fieldset>
+			<fieldset name="categories" label="PLG_PHOCADOWNLOAD_CATEGORIES_FIELDSET_LABEL">
+				<field name="categories_enable" type="radio"
+					   label="PLG_PHOCADOWNLOAD_CATEGORIES_ENABLE"
+					   default="1"
+					   class="btn-group btn-group-yesno">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="categories_changefreq" type="list" default="weekly"
+					   label="PLG_PHOCADOWNLOAD_CATEGORIES_CHANGEFREQ"
+					   showon="categories_enable:1">
+					<option value="always">always</option>
+					<option value="hourly">hourly</option>
+					<option value="daily">daily</option>
+					<option value="weekly">weekly</option>
+					<option value="monthly">monthly</option>
+					<option value="yearly">yearly</option>
+					<option value="never">never</option>
+				</field>
+				<field name="categories_priority" type="list"
+					   default="0.5" label="PLG_PHOCADOWNLOAD_CATEGORIES_PRIORITY"
+					   showon="categories_enable:1">
+					<option value="0.0">0.0</option>
+					<option value="0.1">0.1</option>
+					<option value="0.2">0.2</option>
+					<option value="0.3">0.3</option>
+					<option value="0.4">0.4</option>
+					<option value="0.5">0.5</option>
+					<option value="0.6">0.6</option>
+					<option value="0.7">0.7</option>
+					<option value="0.8">0.8</option>
+					<option value="0.9">0.9</option>
+					<option value="1">1</option>
+				</field>
+			</fieldset>
+			<fieldset name="files" label="PLG_PHOCADOWNLOAD_FILES_FIELDSET_LABEL">
+				<field addfieldpath="plugins/jlsitemap/phocadownload/fields" type="componentparams" name="componentparams"/>
+				<field name="files_enable" type="radio"
+					   label="PLG_PHOCADOWNLOAD_FILES_ENABLE"
+					   default="1"
+					   class="btn-group btn-group-yesno">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="files_changefreq" type="list" default="weekly"
+					   label="PLG_PHOCADOWNLOAD_FILES_CHANGEFREQ"
+					   showon="files_enable:1">
+					<option value="always">always</option>
+					<option value="hourly">hourly</option>
+					<option value="daily">daily</option>
+					<option value="weekly">weekly</option>
+					<option value="monthly">monthly</option>
+					<option value="yearly">yearly</option>
+					<option value="never">never</option>
+				</field>
+				<field name="files_priority" type="list"
+					   default="0.5" label="PLG_PHOCADOWNLOAD_FILES_PRIORITY"
+					   showon="files_enable:1">
+					<option value="0.0">0.0</option>
+					<option value="0.1">0.1</option>
+					<option value="0.2">0.2</option>
+					<option value="0.3">0.3</option>
+					<option value="0.4">0.4</option>
+					<option value="0.5">0.5</option>
+					<option value="0.6">0.6</option>
+					<option value="0.7">0.7</option>
+					<option value="0.8">0.8</option>
+					<option value="0.9">0.9</option>
+					<option value="1">1</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+      <server type="extension" priority="1" name="JLSitemap - Phoca Download updates">https://web-tolk.ru/component/swjprojects/jupdate?element=jl_sitemap_phocadownload</server>
+	</updateservers>
+</extension>

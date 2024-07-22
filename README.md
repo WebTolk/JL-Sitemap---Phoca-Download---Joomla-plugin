@@ -1,2 +1,3 @@
-# JL-Sitemap---Phoca-Download---Joomla-plugin
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)]() [![PHP](https://img.shields.io/badge/PHP-7.4+-green.svg)]() [![JoomlaVersion](https://img.shields.io/badge/Joomla-3.x-gray.svg)]() [![JoomlaVersion](https://img.shields.io/badge/Joomla-4.x-orange.svg)]() [![JoomlaVersion](https://img.shields.io/badge/Joomla-5.x-orange.svg)]() [![Version](https://img.shields.io/badge/Documentation-blue.svg)](https://web-tolk.ru/en/dev/joomla-plugins/jlsitemap-phoca-download-joomla-plugin?utm_source=github)
+# JL Sitemap - Phoca-Download
 Plugin provider of the Phoca Download component data for the JL Sitemap static XML site map component

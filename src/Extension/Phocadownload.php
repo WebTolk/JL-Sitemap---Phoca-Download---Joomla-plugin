@@ -1,22 +1,28 @@
 <?php
 /**
- * @package    JLSitemap - Phoca Gallery Plugin
- * @version    0.9.0
+ * @package    JLSitemap - Phoca Download Plugin
+ * @version    1.0.0
  * @author     Sergey Tolkachyov - web-tolk.ru
  * @copyright  Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.
  * @license    GNU General Public License v3.0
  * @link       https://web-tolk.ru/
  */
+namespace Joomla\Plugin\Jlsitemap\Phocadownload\Extension;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Database\DatabaseAwareTrait;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
 use Joomla\Registry\Registry;
 
-class plgJLSitemapPhocadownload extends CMSPlugin
+class Phocadownload extends CMSPlugin implements SubscriberInterface
 {
+    use DatabaseAwareTrait;
     /**
      * Affects constructor behavior. If true, language files will be loaded automatically.
      *
@@ -27,20 +33,37 @@ class plgJLSitemapPhocadownload extends CMSPlugin
     protected $autoloadLanguage = true;
 
     /**
+     * Returns an array of events this subscriber will listen to.
+     *
+     * @return  array
+     *
+     * @since   4.0.0
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            'onGetUrls' => 'onGetUrls',
+        ];
+    }
+
+    /**
      * Method to get urls array
      *
-     * @param array $urls Urls array
-     * @param Registry $config Component config
+     * @param Event $event
      *
-     * @return  array Urls array with attributes
+     * @return void Urls array with attributes
      *
-     * @since  1.0.0
+     * @since  0.9.0
      */
-    public function onGetUrls(&$urls, $config)
+    public function onGetUrls(Event $event): void
     {
-
-        $componentParams = JComponentHelper::getParams('com_phocadownload');
-        $debug_mode = Factory::getApplication()->input->get('debug');
+        /**
+         * @param array $urls Urls array
+         * @param Registry $config Component config
+         */
+        [$urls, $config] = $event->getArguments();
+        $componentParams = ComponentHelper::getParams('com_phocadownload');
+        $debug_mode = $this->getApplication()->getInput()->get('debug');
         $categoryExcludeStates = [
             0 => Text::_('PLG_PHOCADOWNLOAD_EXCLUDE_CATEGORY_UNPUBLISH'),
             -2 => Text::_('PLG_PHOCADOWNLOAD_EXCLUDE_CATEGORY_TRASH'),
@@ -55,7 +78,7 @@ class plgJLSitemapPhocadownload extends CMSPlugin
         $multilanguage = $config->get('multilanguage');
 
 
-        $db = Factory::getDbo();
+        $db = $this->getDatabase();
         /**
          * Categories
          */
@@ -83,12 +106,12 @@ class plgJLSitemapPhocadownload extends CMSPlugin
             $categories = [];
             $alternates = [];
 
-            JLoader::register('PhocaDownloadRoute', JPATH_ADMINISTRATOR . '/components/com_phocadownload/libraries/phocadownload/path/route.php');
+            \JLoader::register('PhocaDownloadRoute', JPATH_ADMINISTRATOR . '/components/com_phocadownload/libraries/phocadownload/path/route.php');
 
             foreach ($rows as $row) {
                 // Prepare loc attribute
 
-                $loc = PhocaDownloadRoute::getCategoryRoute($row->id . ':' . $row->alias);
+                $loc = \PhocaDownloadRoute::getCategoryRoute($row->id . ':' . $row->alias);
 
                 // Prepare exclude attribute
                 $metadata = new Registry($row->metadata);
@@ -150,7 +173,7 @@ class plgJLSitemapPhocadownload extends CMSPlugin
          *  FILES
          */
         if ($this->params->get('files_enable', 0) == 1 && $componentParams->get('display_file_view','0') == 1) {
-            $now = JFactory::getDate('now', 'UTC')->toSql();
+            $now = Factory::getDate('now', 'UTC')->toSql();
             $query = 'SELECT * FROM ' . $db->quoteName('#__phocadownload', 'file');
 
             if (!$debug_mode) {
@@ -180,7 +203,7 @@ class plgJLSitemapPhocadownload extends CMSPlugin
                 /**
                  * $id, $catid = 0, $idAlias = '', $catidAlias = '', $sectionid = 0, $type = 'file'
                  */
-                $loc = PhocaDownloadRoute::getFileRoute($row->id, $row->catid, $row->alias);
+                $loc = \PhocaDownloadRoute::getFileRoute($row->id, $row->catid, $row->alias);
 
                 // Prepare exclude attribute
                 $metadata = new Registry($row->metadata);
@@ -243,6 +266,6 @@ class plgJLSitemapPhocadownload extends CMSPlugin
             $urls = array_merge($urls, $files);
         }
 
-        return $urls;
+        $event->setArgument(0, $urls);
     }
 }

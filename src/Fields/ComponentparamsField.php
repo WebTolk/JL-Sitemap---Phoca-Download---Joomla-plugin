@@ -1,24 +1,21 @@
 <?php
 /**
- * @package     WebTolk plugin info field
- * @version     0.9.0
- * @Author 		Sergey Tolkachyov, https://web-tolk.ru
- * @copyright   Copyright (C) 2020 Sergey Tolkachyov
- * @license     GNU/GPL http://www.gnu.org/licenses/gpl-2.0.html
- * @since 		1.0.0
+ * @package    JLSitemap - Phoca Download Plugin
+ * @version    1.0.0
+ * @author     Sergey Tolkachyov - web-tolk.ru
+ * @copyright  Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.
+ * @license    GNU General Public License v3.0
+ * @link       https://web-tolk.ru/dev/joomla-plugins/jlsitemap-phoca-download-joomla-plugin
  */
+namespace Joomla\Plugin\Jlsitemap\Phocadownload\Fields;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Field\SpacerField;
 use Joomla\CMS\Language\Text;
-use \Joomla\CMS\Factory;
-use Joomla\Registry\Registry;
-FormHelper::loadFieldClass('spacer');
 
-class JFormFieldComponentparams extends JFormFieldSpacer
+class ComponentparamsField extends SpacerField
 {
 
 	protected $type = 'componentparams';
@@ -33,7 +30,7 @@ class JFormFieldComponentparams extends JFormFieldSpacer
 	 */
 	protected function getInput()
 	{
-        $componentParams = JComponentHelper::getParams('com_phocadownload');
+        $componentParams = ComponentHelper::getParams('com_phocadownload');
         $display_file_view = $componentParams->get('display_file_view','0');
         $files_in_sitemap = 0;
         $css_class = 'danger';
@@ -44,10 +41,10 @@ class JFormFieldComponentparams extends JFormFieldSpacer
         return $html = '
         </div>
 		<div class="alert alert-info">
-    		'.Text::sprintf('PLG_JLSITEMAP_PHOCADOWNLOAD_COMPONENT_PARAM_DISPLAY_FILE_VIEW',Text::_('PLG_JLSITEMAP_PHOCADOWNLOAD_COMPONENT_PARAM_DISPLAY_FILE_VIEW_'.$display_file_view)).'
+    		'.Text::sprintf('PLG_PHOCADOWNLOAD_COMPONENT_PARAM_DISPLAY_FILE_VIEW',Text::_('PLG_PHOCADOWNLOAD_COMPONENT_PARAM_DISPLAY_FILE_VIEW_'.$display_file_view)).'
 		</div>
 		<div class="alert alert-'.$css_class.'">
-		'.Text::sprintf('PLG_JLSITEMAP_PHOCADOWNLOAD_FILES_IN_SITEMAP',Text::_('PLG_JLSITEMAP_PHOCADOWNLOAD_FILES_IN_SITEMAP_'.$files_in_sitemap)).'
+		'.Text::sprintf('PLG_PHOCADOWNLOAD_FILES_IN_SITEMAP',Text::_('PLG_PHOCADOWNLOAD_FILES_IN_SITEMAP_'.$files_in_sitemap)).'
         </div>
 		<div>
 	';
@@ -75,6 +72,4 @@ class JFormFieldComponentparams extends JFormFieldSpacer
 	{
 		return $this->getLabel();
 	}
-
 }
-?>

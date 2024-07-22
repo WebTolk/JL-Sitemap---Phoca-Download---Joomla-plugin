@@ -1,127 +1,239 @@
 <?php
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Factory;
-use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\Installer\InstallerHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Plugin\PluginHelper;
-
 /**
- * Script file of HelloWorld component.
- *
- * The name of this class is dependent on the component being installed.
- * The class name should have the component's name, directly followed by
- * the text InstallerScript (ex:. com_helloWorldInstallerScript).
- *
- * This class will be called by Joomla!'s installer, if specified in your component's
- * manifest file, and is used for custom automation actions in its installation process.
- *
- * In order to use this automation script, you should reference it in your component's
- * manifest file as follows:
- * <scriptfile>script.php</scriptfile>
- *
- * @package     Joomla.Administrator
- * @subpackage  com_helloworld
- *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @package    JLSitemap - Phoca Download Plugin
+ * @version    1.0.0
+ * @author     Sergey Tolkachyov - web-tolk.ru
+ * @copyright  Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.
+ * @license    GNU General Public License v3.0
+ * @link       https://web-tolk.ru/dev/joomla-plugins/jlsitemap-phoca-download-joomla-plugin
  */
-class plgJlsitemapPhocadownloadInstallerScript
-{
-    /**
-     * This method is called after a component is installed.
-     *
-     * @param  \stdClass $parent - Parent object calling this method.
-     *
-     * @return void
-     */
-    public function install($parent)
+declare(strict_types=1);
+
+use Joomla\CMS\Application\AdministratorApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Installer\InstallerScriptInterface;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Version;
+use Joomla\Database\DatabaseDriver;
+use Joomla\DI\Container;
+use Joomla\DI\ServiceProviderInterface;
+
+\defined('_JEXEC') or die;
+
+return new class () implements ServiceProviderInterface {
+    public function register(Container $container)
     {
+        $container->set(InstallerScriptInterface::class, new class ($container->get(AdministratorApplication::class)) implements InstallerScriptInterface {
+            /**
+             * The application object
+             *
+             * @var  AdministratorApplication
+             *
+             * @since  1.0.0
+             */
+            protected AdministratorApplication $app;
 
+            /**
+             * The Database object.
+             *
+             * @var   DatabaseDriver
+             *
+             * @since  1.0.0
+             */
+            protected DatabaseDriver $db;
+
+            /**
+             * Minimum Joomla version required to install the extension.
+             *
+             * @var  string
+             *
+             * @since  1.0.0
+             */
+            protected string $minimumJoomla = '4.0';
+
+            /**
+             * Minimum PHP version required to install the extension.
+             *
+             * @var  string
+             *
+             * @since  1.0.0
+             */
+            protected string $minimumPhp = '7.4';
+
+            /**
+             * Constructor.
+             *
+             * @param   AdministratorApplication  $app  The application object.
+             *
+             * @since 1.0.0
+             */
+            public function __construct(AdministratorApplication $app)
+            {
+                $this->app = $app;
+                $this->db  = Factory::getContainer()->get('DatabaseDriver');
+            }
+
+            /**
+             * Function called after the extension is installed.
+             *
+             * @param   InstallerAdapter  $adapter  The adapter calling this method
+             *
+             * @return  boolean  True on success
+             *
+             * @since   1.0.0
+             */
+            public function install(InstallerAdapter $adapter): bool
+            {
+                $this->enablePlugin($adapter);
+
+                return true;
+            }
+
+            /**
+             * Function called after the extension is updated.
+             *
+             * @param   InstallerAdapter  $adapter  The adapter calling this method
+             *
+             * @return  boolean  True on success
+             *
+             * @since   1.0.0
+             */
+            public function update(InstallerAdapter $adapter): bool
+            {
+                return true;
+            }
+
+            /**
+             * Function called after the extension is uninstalled.
+             *
+             * @param   InstallerAdapter  $adapter  The adapter calling this method
+             *
+             * @return  boolean  True on success
+             *
+             * @since   1.0.0
+             */
+            public function uninstall(InstallerAdapter $adapter): bool
+            {
+
+                return true;
+            }
+
+            /**
+             * Function called before extension installation/update/removal procedure commences.
+             *
+             * @param   string            $type     The type of change (install or discover_install, update, uninstall)
+             * @param   InstallerAdapter  $adapter  The adapter calling this method
+             *
+             * @return  boolean  True on success
+             *
+             * @since   1.0.0
+             */
+            public function preflight(string $type, InstallerAdapter $adapter): bool
+            {
+                // Check compatible
+                if (!$this->checkCompatible('PLG_' . $adapter->getElement()))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            /**
+             * Function called after extension installation/update/removal procedure commences.
+             *
+             * @param   string            $type     The type of change (install or discover_install, update, uninstall)
+             * @param   InstallerAdapter  $adapter  The adapter calling this method
+             *
+             * @return  boolean  True on success
+             *
+             * @since   1.0.0
+             */
+            public function postflight(string $type, InstallerAdapter $adapter): bool
+            {
+                $smile = '';
+
+                if ($type !== 'uninstall')
+                {
+                    if ($type != 'uninstall')
+                    {
+                        $smiles    = ['&#9786;', '&#128512;', '&#128521;', '&#128525;', '&#128526;', '&#128522;', '&#128591;'];
+                        $smile_key = array_rand($smiles, 1);
+                        $smile     = $smiles[$smile_key];
+                    }
+                }
+                else
+                {
+                    $smile = ':(';
+                }
+
+                $element = 'PLG_' . strtoupper($adapter->getElement());
+                $type    = strtoupper($type);
+
+                $html = '
+				<div class="row m-0">
+				<div class="col-12 col-md-8 p-0 pe-2">
+				<h2>' . $smile . ' ' . Text::_($element . '_AFTER_' . $type) . ' <br/>' . Text::_($element) . '</h2>
+				' . Text::_($element . '_DESC');
+                $html .= Text::_($element . '_WHATS_NEW');
+                $html .= '</div>
+				<div class="col-12 col-md-4 p-0 d-flex flex-column justify-content-start">
+				<img width="180" src="https://web-tolk.ru/web_tolk_logo_wide.png">
+				<p>Joomla Extensions</p>
+				<p class="btn-group">
+					<a class="btn btn-sm btn-outline-primary" href="https://web-tolk.ru" target="_blank"> https://web-tolk.ru</a>
+					<a class="btn btn-sm btn-outline-primary" href="mailto:info@web-tolk.ru"><i class="icon-envelope"></i> info@web-tolk.ru</a>
+				</p>
+				<div class="btn-group-vertical mb-3 web-tolk-btn-links" role="group" aria-label="Joomla community links">
+				<a class="btn btn-danger text-white w-100" href="https://t.me/joomlaru" target="_blank">' . Text::_($element . '_JOOMLARU_TELEGRAM_CHAT') . '</a>
+				<a class="btn btn-primary text-white w-100" href="https://t.me/webtolkru" target="_blank">' . Text::_($element . '_WEBTOLK_TELEGRAM_CHANNEL') . '</a>
+				</div>
+				' . Text::_($element . "_MAYBE_INTERESTING") . '
+				</div>
+				';
+                $this->app->enqueueMessage($html, 'info');
+
+                return true;
+
+            }
+
+            /**
+             * Method to check compatible.
+             *
+             * @return  boolean True on success, False on failure.
+             *
+             * @throws  Exception
+             *
+             * @since  1.0.0
+             */
+            protected function checkCompatible(string $element): bool
+            {
+                $element = strtoupper($element);
+                // Check joomla version
+                if (!(new Version)->isCompatible($this->minimumJoomla))
+                {
+                    $this->app->enqueueMessage(
+                        Text::sprintf($element . '_ERROR_COMPATIBLE_JOOMLA', $this->minimumJoomla),
+                        'error'
+                    );
+
+                    return false;
+                }
+
+                // Check PHP
+                if (!(version_compare(PHP_VERSION, $this->minimumPhp) >= 0))
+                {
+                    $this->app->enqueueMessage(
+                        Text::sprintf($element . '_ERROR_COMPATIBLE_PHP', $this->minimumPhp),
+                        'error'
+                    );
+
+                    return false;
+                }
+
+                return true;
+            }
+        });
     }
-
-    /**
-     * This method is called after a component is uninstalled.
-     *
-     * @param  \stdClass $parent - Parent object calling this method.
-     *
-     * @return void
-     */
-    public function uninstall($parent) 
-    {
-
-		
-    }
-
-    /**
-     * This method is called after a component is updated.
-     *
-     * @param  \stdClass $parent - Parent object calling object.
-     *
-     * @return void
-     */
-    public function update($parent) 
-    {
-
-    }
-
-    /**
-     * Runs just before any installation action is performed on the component.
-     * Verifications and pre-requisites should run in this function.
-     *
-     * @param  string    $type   - Type of PreFlight action. Possible values are:
-     *                           - * install
-     *                           - * update
-     *                           - * discover_install
-     * @param  \stdClass $parent - Parent object calling object.
-     *
-     * @return void
-     */
-    public function preflight($type, $parent) 
-    {
-
-    }
-	
-
-
-    /**
-     * Runs right after any installation action is performed on the component.
-     *
-     * @param  string    $type   - Type of PostFlight action. Possible values are:
-     *                           - * install
-     *                           - * update
-     *                           - * discover_install
-     * @param  \stdClass $parent - Parent object calling object.
-     *
-     * @return void
-     */
-    function postflight($type, $parent) 
-    {
-		$element = strtoupper($parent->get("element"));
-		
-		echo "
-		<div class='row' style='margin:25px auto; border:1px solid rgba(0,0,0,0.125); box-shadow:0px 0px 10px rgba(0,0,0,0.125); padding: 10px 20px;'>
-		<div class='span8 control-group' id='wt_download_id_form_wrapper'>
-		<h2>".JText::_("PLG_".$element."_AFTER_".strtoupper($type))." <br/>".JText::_("PLG_".$element)."</h2>
-		".Text::_("PLG_".$element."_DESC");
-		
-		if($type == "update"){
-			echo JText::_("PLG_".$element."_WHATS_NEW");
-		}
-		
-		echo "</div>
-		<div class='span4' style='display:flex; flex-direction:column; justify-content:center;'>
-		<img width='200px' src='https://web-tolk.ru/web_tolk_logo_wide.png'>
-		<p>Joomla Extensions</p>
-		<p><a class='btn' href='https://web-tolk.ru' target='_blank'><i class='icon-share-alt'></i> https://web-tolk.ru</a> <a class='btn' href='mailto:info@web-tolk.ru'><i class='icon-envelope'></i>  info@web-tolk.ru</a></p>
-		<p><a class='btn btn-danger' href='https://t.me/joomlaru' target='_blank'>" . Text::_("PLG_".$element . '_JOOMLARU_TELEGRAM_CHAT') . "</a></p>
-		<p><a class='btn btn-primary' href='https://t.me/webtolkru' target='_blank'>" . Text::_("PLG_".$element . '_WEBTOLK_TELEGRAM_CHANNEL') . "</a></p>
-		".JText::_("PLG_".$element."_MAYBE_INTERESTING")."
-		</div>
-
-
-		";		
-	
-    }
-}
+};

@@ -2,30 +2,30 @@
 <extension type="plugin" group="jlsitemap" method="upgrade">
 	<name>PLG_PHOCADOWNLOAD</name>
 	<author>Sergey Tolkachyov</author>
-	<creationDate>July 2024</creationDate>
+	<creationDate>18.07.2024</creationDate>
 	<copyright>Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.</copyright>
 	<license>GNU General Public License v3.0</license>
 	<authorEmail>info@web-tolk.ru</authorEmail>
 	<authorUrl>https://web-tolk.ru</authorUrl>
-	<version>1.0.0</version>
+	<version>0.9.0.1</version>
 	<description>PLG_PHOCADOWNLOAD_DESC</description>
-	<namespace path="src">Joomla\Plugin\Jlsitemap\Phocadownload</namespace>
 	<scriptfile>script.php</scriptfile>
 	<languages folder="language">
-		<language tag="en-GB">en-GB/plg_jlsitemap_phocadownload.ini</language>
-		<language tag="en-GB">en-GB/plg_jlsitemap_phocadownload.sys.ini</language>
-		<language tag="ru-RU">ru-RU/plg_jlsitemap_phocadownload.ini</language>
-		<language tag="ru-RU">ru-RU/plg_jlsitemap_phocadownload.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_jlsitemap_phocadownload.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_jlsitemap_phocadownload.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_jlsitemap_phocadownload.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_jlsitemap_phocadownload.sys.ini</language>
 	</languages>
 	<files>
-		<folder plugin="phocadownload">src</folder>
+		<filename plugin="phocadownload">phocadownload.php</filename>
+		<filename>phocadownload.xml</filename>
+		<folder>fields</folder>
 		<folder>language</folder>
-		<folder>services</folder>
 	</files>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field addfieldprefix="Joomla\Plugin\Jlsitemap\Phocadownload\Fields" type="plugininfo" name="plugininfo"/>
+				<field addfieldpath="plugins/jlsitemap/phocadownload/fields" type="plugininfo" name="plugininfo"/>
 			</fieldset>
 			<fieldset name="categories" label="PLG_PHOCADOWNLOAD_CATEGORIES_FIELDSET_LABEL">
 				<field name="categories_enable" type="radio"
@@ -63,7 +63,7 @@
 				</field>
 			</fieldset>
 			<fieldset name="files" label="PLG_PHOCADOWNLOAD_FILES_FIELDSET_LABEL">
-				<field addfieldprefix="Joomla\Plugin\Jlsitemap\Phocadownload\Fields" type="componentparams" name="componentparams"/>
+				<field addfieldpath="plugins/jlsitemap/phocadownload/fields" type="componentparams" name="componentparams"/>
 				<field name="files_enable" type="radio"
 					   label="PLG_PHOCADOWNLOAD_FILES_ENABLE"
 					   default="1"
@@ -103,5 +103,4 @@
 	<updateservers>
       <server type="extension" priority="1" name="JLSitemap - Phoca Download updates">https://web-tolk.ru/component/swjprojects/jupdate?element=jl_sitemap_phocadownload</server>
 	</updateservers>
-	<changelogurl>https://web-tolk.ru/jchangelog?element=jl_sitemap_phocadownload</changelogurl>
 </extension>

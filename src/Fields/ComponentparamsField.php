@@ -1,21 +1,24 @@
 <?php
 /**
- * @package    JLSitemap - Phoca Download Plugin
- * @version    1.0.0
- * @author     Sergey Tolkachyov - web-tolk.ru
- * @copyright  Copyright (c) 2024 Sergey Tolkachyov. All rights reserved.
- * @license    GNU General Public License v3.0
- * @link       https://web-tolk.ru/dev/joomla-plugins/jlsitemap-phoca-download-joomla-plugin
+ * @package     WebTolk plugin info field
+ * @version     1.0.0
+ * @Author 		Sergey Tolkachyov, https://web-tolk.ru
+ * @copyright   Copyright (C) 2020 Sergey Tolkachyov
+ * @license     GNU/GPL http://www.gnu.org/licenses/gpl-2.0.html
+ * @since 		1.0.0
  */
-namespace Joomla\Plugin\Jlsitemap\Phocadownload\Fields;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Form\Field\SpacerField;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
+use \Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+FormHelper::loadFieldClass('spacer');
 
-class ComponentparamsField extends SpacerField
+class JFormFieldComponentparams extends JFormFieldSpacer
 {
 
 	protected $type = 'componentparams';
@@ -30,7 +33,7 @@ class ComponentparamsField extends SpacerField
 	 */
 	protected function getInput()
 	{
-        $componentParams = ComponentHelper::getParams('com_phocadownload');
+        $componentParams = JComponentHelper::getParams('com_phocadownload');
         $display_file_view = $componentParams->get('display_file_view','0');
         $files_in_sitemap = 0;
         $css_class = 'danger';
@@ -72,4 +75,6 @@ class ComponentparamsField extends SpacerField
 	{
 		return $this->getLabel();
 	}
+
 }
+?>
